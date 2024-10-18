@@ -1,124 +1,85 @@
-package com.example.assignment_1;
-
-import android.app.Dialog;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.SeekBar;
-import android.widget.TextView;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-public class MainActivity extends AppCompatActivity {
-    Button btnFilter;
-    CheckBox[] bhkCheckboxes;
-
-    String[] bhkMessages = {
-            "1 BHK Flat Booked\n",
-            "2 BHK Flat Booked\n",
-            "3 BHK Flat Booked\n",
-            "4 BHK Flat Booked\n",
-            "5 BHK Flat Booked\n"
-    };
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initViews();
-        initListeners();
-    }
-
-    private void initViews() {
-        btnFilter = findViewById(R.id.btnFilter);
-    }
-
-    private void initListeners() {
-        btnFilter.setOnClickListener(view -> showCustomDialog());
-    }
-
-    private void showCustomDialog() {
-        final Dialog dialog = new Dialog(MainActivity.this);
-        dialog.setContentView(R.layout.dialog);
-
-        SeekBar priceSeekBar = dialog.findViewById(R.id.seekBarPrice);
-        TextView priceRange = dialog.findViewById(R.id.txtPriceRange);
-        Button buttonOk = dialog.findViewById(R.id.btnOk);
-
-        // Initialize checkboxes
-        bhkCheckboxes = new CheckBox[]{
-                dialog.findViewById(R.id.chk1),
-                dialog.findViewById(R.id.chk2),
-                dialog.findViewById(R.id.chk3),
-                dialog.findViewById(R.id.chk4),
-                dialog.findViewById(R.id.chk5)
-        };
-
-        priceSeekBar.setMax(5);
-        priceSeekBar.setProgress(0);
-        priceRange.setText("Selected Price Range: 0");
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:id="@+id/txtPriceRange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Price range"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:layout_goneMarginTop="20dp"
+        android:layout_marginTop="16dp"
+        android:textAlignment="center"/>
+    <SeekBar
+        android:id="@+id/seekBarPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/txtPriceRange"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp" />
 
 
-        // listeners for SeekBar and OK button
-        SeekBarListener(dialog, priceSeekBar, priceRange, buttonOk);
+    <CheckBox
+        android:id="@+id/chk1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="1 bhk"
+        app:layout_constraintTop_toBottomOf="@id/seekBarPrice"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"/>
 
+    <CheckBox
+        android:id="@+id/chk2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2 bhk"
+        app:layout_constraintTop_toBottomOf="@id/chk1"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"/>
 
-        dialog.show();
-    }
-    private void SeekBarListener(Dialog dialog, SeekBar priceSeekBar, TextView priceRange, Button buttonOk) {
-        priceSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                priceRange.setText("Selected Price Range: " + (progress * 10000));
-            }
+    <CheckBox
+        android:id="@+id/chk3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3 bhk"
+        android:max="10000"
+        app:layout_constraintTop_toBottomOf="@id/chk2"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"/>
+    <CheckBox
+        android:id="@+id/chk4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2 bhk"
+        app:layout_constraintTop_toBottomOf="@id/chk3"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"/>
+    <CheckBox
+        android:id="@+id/chk5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1 bhk"
+        app:layout_constraintTop_toBottomOf="@id/chk4"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"/>
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+    <Button
+        android:id="@+id/btnOk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/chk5"
+        android:text="Ok"
+        android:textSize="20sp"
+        android:layout_marginRight="130dp"
+        android:layout_marginLeft="130dp"
+        android:layout_marginTop="20dp" />
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-
-        buttonOk.setOnClickListener(view -> {
-            StringBuilder message = new StringBuilder();
-            for (int i = 0; i < bhkCheckboxes.length; i++) {
-                if (bhkCheckboxes[i].isChecked()) {
-                    message.append(bhkMessages[i]);
-                    // Set the SeekBar progress and price range based on the selected checkbox
-                    switch (i) {
-                        case 0: // 1 BHK
-                            priceSeekBar.setProgress(1);
-                            break;
-                        case 1: // 2 BHK
-                            priceSeekBar.setProgress(2);
-                            break;
-                        case 2: // 3 BHK
-                            priceSeekBar.setProgress(3);
-                            break;
-                        case 3: // 4 BHK
-                            priceSeekBar.setProgress(4);
-                            break;
-                        case 4: // 5 BHK
-                            priceSeekBar.setProgress(5);
-                            break;
-                    }
-                }
-            }
-            message.append("Selected Price Range: ").append(priceSeekBar.getProgress() * 10000).append("\n");
-
-            if (message.length() == 0) {
-                message.append("No flats selected.");
-            }
-
-            // Show the dialog with selected options
-            new AlertDialog.Builder(MainActivity.this)
-                    .setTitle("Selected Flat")
-                    .setMessage(message.toString())
-                    .setPositiveButton("OK", (dialog1, id) -> dialog.dismiss())
-                    .create()
-                    .show();
-        });
-    }
-}
+</androidx.constraintlayout.widget.ConstraintLayout>
